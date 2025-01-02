@@ -2,11 +2,17 @@ import { useEffect, useState } from "react";
 import { Event } from "@/api/types";
 import { getEvent } from "@/api/endpoints";
 
+type Props = {
+    onEventLoad: (id: string) => void
+  }
 
-export function EventDetail() {
+
+export function EventDetail({onEventLoad}: Props) {
 
     const [event, setEvent] = useState<Event | undefined>();
     const [loading, setLoading] = useState(true);
+
+    
 
     useEffect(() => {
 
@@ -16,6 +22,10 @@ export function EventDetail() {
                 setLoading(true);
                 const data = await getEvent();
                 setEvent(data);
+                
+                if (data.eventId) {
+                    onEventLoad(data.eventId)
+                }
 
             }
             loadEventData();

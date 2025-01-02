@@ -12,9 +12,13 @@ import {
 } from '@/components/ui/dropdown-menu.tsx';
 import { EventDetail } from './components/event/EventDetail';
 import './App.css';
+import { useState } from 'react';
+import { SeatingMap } from './components/seating/SeatingMap';
 
 function App() {
 	const isLoggedIn = false;
+
+	const [eventId, setEventId] = useState<string>();
 	
 	return (
 		<div className="flex flex-col grow">
@@ -73,6 +77,7 @@ function App() {
 				{/* inner content */}
 				<div className="max-w-screen-lg m-auto p-4 flex items-start grow gap-3 w-full">
 					{/* seating card */}
+					<SeatingMap eventId={eventId}/>
 					<div className="bg-white rounded-md grow grid p-3 self-stretch shadow-sm" style={{
 						gridTemplateColumns: 'repeat(auto-fill, minmax(40px, 1fr))',
 						gridAutoRows: '40px'
@@ -87,7 +92,7 @@ function App() {
 					
 					{/* event info */}
 					<aside className="w-full max-w-sm bg-white rounded-md shadow-sm p-3 flex flex-col gap-2">
-						<EventDetail/>
+						<EventDetail onEventLoad={setEventId}/>
 						
 						{/* add to calendar button */}
 						<Button variant="secondary" disabled>
