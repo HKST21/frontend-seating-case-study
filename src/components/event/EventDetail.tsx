@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Event } from "@/api/types";
 import { getEvent } from "@/api/endpoints";
 
@@ -16,7 +16,7 @@ export function EventDetail() {
                 setLoading(true);
                 const data = await getEvent();
                 setEvent(data);
-    
+
             }
             loadEventData();
         }
@@ -30,21 +30,21 @@ export function EventDetail() {
         }
 
 
-        
-    },[])
+
+    }, [])
 
 
 
 
-    return(
+    return (
         <div>
             {loading ? <div>Loading...</div> :
-            <div> 
-                <h1>{event?.namePub}</h1>
-                <p>{event?.description}</p>
-                <p>{event?.place}</p>
-                <p>{event?.dateFrom} - {event?.dateTo}</p>
-            </div>}
+                <>
+                    <div className="bg-zinc-100 rounded-md h-32" />
+                    <h1 className="text-xl text-zinc-900 font-semibold">{event?.namePub}</h1>
+                    {/* event description */}
+                    <p className="text-sm text-zinc-500">{event?.description}</p>
+                </>}
         </div>
     )
 }
