@@ -74,8 +74,17 @@ interface OrderRes {
     totalAmount: number
 };
 
+interface Cart {
+    items: {
+        ticketTypeId: string,
+        seatId: string
+    }[],
+    totalPrice: number,
+    totalTickets: number
+}
+
 export type {
     Event, Tickets, TicketType, SeatRow, Seat,
     TestLoginReq, TestLoginRes,
-    OrderReq, OrderRes, User
+    OrderReq, OrderRes, User, Cart
   };

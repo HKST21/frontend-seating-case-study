@@ -24,7 +24,7 @@ export function EventDetail({onEventLoad}: Props) {
                 setEvent(data);
                 
                 if (data.eventId) {
-                    onEventLoad(data.eventId)
+                    onEventLoad(data.eventId) // volám setEventId s parametrem eventId vlastnosti na objektu z BE. Zavoláním předám eventId do  Appu.
                 }
 
             }
@@ -41,7 +41,7 @@ export function EventDetail({onEventLoad}: Props) {
 
 
 
-    }, [])
+    }, []);
 
 
 

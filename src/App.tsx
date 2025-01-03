@@ -1,4 +1,5 @@
 import { Seat } from '@/components/Seat.tsx';
+import { Cart } from './components/cart/Cart';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import {
@@ -14,11 +15,20 @@ import { EventDetail } from './components/event/EventDetail';
 import './App.css';
 import { useState } from 'react';
 import { SeatingMap } from './components/seating/SeatingMap';
+import { TicketType } from './api/types';
 
 function App() {
-	const isLoggedIn = false;
+    const isLoggedIn = false;
+    const [eventId, setEventId] = useState<string>();
+    const [ticketTypes, setTicketTypes] = useState<TicketType[]>([]);
+    const [selectedSeats, setSelectedSeats] = useState<{
+        ticketTypeId: string,
+        seatId: string
+    }[]>([]);
 
-	const [eventId, setEventId] = useState<string>();
+    const handleTicketTypesLoad = (types: TicketType[]) => {
+        setTicketTypes(types);
+    };
 	
 	return (
 		<div className="flex flex-col grow">
@@ -74,52 +84,29 @@ function App() {
 			
 			{/* main body (wrapper) */}
 			<main className="grow flex flex-col justify-center">
-				{/* inner content */}
-				<div className="max-w-screen-lg m-auto p-4 flex items-start grow gap-3 w-full">
-					{/* seating card */}
-					<SeatingMap eventId={eventId}/>
-					<div className="bg-white rounded-md grow grid p-3 self-stretch shadow-sm" style={{
-						gridTemplateColumns: 'repeat(auto-fill, minmax(40px, 1fr))',
-						gridAutoRows: '40px'
-					}}>
-						{/*	seating map */}
-						{
-							Array.from({ length: 100 }, (_, i) => (
-								<Seat key={i} />
-							))
-						}
-					</div>
-					
-					{/* event info */}
-					<aside className="w-full max-w-sm bg-white rounded-md shadow-sm p-3 flex flex-col gap-2">
-						<EventDetail onEventLoad={setEventId}/>
-						
-						{/* add to calendar button */}
-						<Button variant="secondary" disabled>
-							Add to calendar
-						</Button>
-					</aside>
-				</div>
-			</main>
-			
-			{/* bottom cart affix (wrapper) */}
-			<nav className="sticky bottom-0 left-0 right-0 bg-white border-t border-zinc-200 flex justify-center">
-				{/* inner content */}
-				<div className="max-w-screen-lg p-6 flex justify-between items-center gap-4 grow">
-					{/* total in cart state */}
-					<div className="flex flex-col">
-						<span>Total for [?] tickets</span>
-						<span className="text-2xl font-semibold">[?] CZK</span>
-					</div>
-					
-					{/* checkout button */}
-					<Button disabled variant="default">
-						Checkout now
-					</Button>
-				</div>
-			</nav>
-		</div>
-	);
+                <div className="max-w-screen-lg m-auto p-4 flex items-start grow gap-3 w-full">
+                    <SeatingMap 
+                        eventId={eventId}
+                        selectedSeats={selectedSeats}
+                        onSelectSeats={setSelectedSeats}
+                        onTicketTypesLoad={handleTicketTypesLoad}
+                    />
+                    
+                    <aside className="w-full max-w-sm bg-white rounded-md shadow-sm p-3 flex flex-col gap-2">
+                        <EventDetail onEventLoad={setEventId}/>
+                        <Button variant="secondary" disabled>Add to calendar</Button>
+                    </aside>
+                </div>
+            </main>
+            
+            <nav className="sticky bottom-0 left-0 right-0 bg-white border-t border-zinc-200 flex justify-center">
+                <Cart
+                    selectedSeats={selectedSeats}
+                    ticketTypes={ticketTypes}
+                />
+            </nav>
+        </div>
+    );
 }
 
 export default App;

@@ -10,7 +10,12 @@ export const getEvent = async (): Promise<Event> => {
 
     try {
 
-        const response = await fetch(`${API_BASE}/event`);
+        const response = await fetch(`${API_BASE}/event`, {
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
         if (!response.ok) {
             throw new Error(`HTTP error: ${response.status}`);
         }
@@ -27,7 +32,12 @@ export const getEvent = async (): Promise<Event> => {
 
 export const getEventTix = async (eventId: string): Promise<Tickets> => {
     try {
-        const response = await fetch(`${API_BASE}/event-tickets?eventId=${eventId}`);
+        const response = await fetch(`${API_BASE}/event-tickets?eventId=${eventId}`, {
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
         if (!response.ok) {
             throw new Error(`HTTP error: ${response.status}`);
