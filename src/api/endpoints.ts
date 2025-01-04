@@ -1,7 +1,6 @@
 import type {
-    Event, Tickets, TicketType, SeatRow, Seat,
-    TestLoginReq, TestLoginRes,
-    OrderReq, OrderRes, User
+    Event, Tickets, TestLoginRes,
+    OrderReq, OrderRes, 
 } from "./types";
 
 const API_BASE = '/api';
