@@ -24,10 +24,11 @@ export function Cart({ selectedSeats, ticketTypes, eventId }: CartProps) {
     const [showLogin, setShowLogin] = useState(false);
 
     const handleLoginSuccess = async (user: User) => { // voláme funkci na vytvoření order na BE
+        console.log('handleLoginSuccess called with user:', user);
 
         try {
             if (eventId) {
-
+                console.log('Creating order with:', { eventId, tickets: selectedSeats, user });
                 await createOrder({
                     eventId: eventId,
                     tickets: selectedSeats,
