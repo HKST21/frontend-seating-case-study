@@ -1,6 +1,6 @@
-import { useState } from "react";
+
 import { TicketType } from "@/api/types";
-import { Button } from "@/components/ui/button";
+
 import { User } from "@/api/types";
 import { Login } from "../login/Login";
 import { createOrder } from "@/api/endpoints";
@@ -13,6 +13,9 @@ type CartProps = {
     ticketTypes: TicketType[];
     eventId: string | undefined;
 }
+/**
+ * Cart componenta umožňuje výběr vstupenek a jejich order a finální potvrzení jako host, nebo logged in uživatel
+ */
 
 export function Cart({ selectedSeats, ticketTypes, eventId }: CartProps) {
     // Spočítáme celkovou cenu
@@ -21,8 +24,10 @@ export function Cart({ selectedSeats, ticketTypes, eventId }: CartProps) {
         return sum + (ticketType?.price || 0);
     }, 0);
 
-    const [showLogin, setShowLogin] = useState(false);
-
+    /**
+     * Zpracování přihlášení a okamžitého vytvoření objednávky
+     * @param user přihlášený uživatel
+     */
     const handleLoginSuccess = async (user: User) => { // voláme funkci na vytvoření order na BE
         console.log('handleLoginSuccess called with user:', user);
 
@@ -34,7 +39,7 @@ export function Cart({ selectedSeats, ticketTypes, eventId }: CartProps) {
                     tickets: selectedSeats,
                     user: user
                 });
-                setShowLogin(false)
+                
             }            
 
         }

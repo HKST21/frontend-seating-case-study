@@ -4,10 +4,11 @@ import { getEventTix } from "@/api/endpoints";
 import { Seat } from "../Seat";
 import React from "react";
 
-/*
-* Poznámka:
-* API vrací při každém volání - refreshi stránky různá data sedadel. Pravděpodobně je o záměr a nebudu to řešit.
-*/
+/**
+ * Componenta pro zobrazení a výběr sedadel
+ * @note API vrací při každém volání - refreshi stránky různá data sedadel. Pravděpodobně je o záměr a nebudu to řešit.
+ */
+
 
 type Props = {
     eventId: string | undefined;
@@ -26,10 +27,11 @@ type Props = {
 }
 export function SeatingMap({ eventId, selectedSeats, onSelectSeats, onTicketTypesLoad }: Props) {
 
+    //State pro ukládání dat o vstupenkách a sedadlech
     const [tix, setTix] = useState<Tickets>();
 
 
-
+    // handler pro výběr sedadla
     const handleSeatSelection = (seat: SeatType) => {
         onSelectSeats(selectedSeats => {
             if (selectedSeats.some(s => s.seatId === seat.seatId)) {
@@ -44,7 +46,7 @@ export function SeatingMap({ eventId, selectedSeats, onSelectSeats, onTicketType
     };
 
 
-
+    // načtení dat z Api
     useEffect(() => {
 
         if (eventId) {
@@ -78,8 +80,10 @@ export function SeatingMap({ eventId, selectedSeats, onSelectSeats, onTicketType
                 gridTemplateColumns: 'repeat(auto-fill, minmax(40px, 1fr))',
                 gridAutoRows: '40px'
             }}>
+                {/* Mapování řad sedadel */}
                 {tix?.seatRows.map((row) => (
                     <React.Fragment key={row.seatRow}>
+                        {/* Vnořené Mapování jednotlivých sedadel v řadě */}
                         {row.seats.map((seat) => (
                             <Seat
                                 key={seat.seatId}

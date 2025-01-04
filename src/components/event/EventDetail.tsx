@@ -3,17 +3,22 @@ import { Event } from "@/api/types";
 import { getEvent } from "@/api/endpoints";
 
 type Props = {
-    onEventLoad: (id: string) => void
+    /**clb pro předání id eventu do app */
+    onEventLoad: (id: string) => void,
+    /**clb pro předání objektu event do app pro google cal */
+    onEventUrlData: (event: Event) => void  
   }
 
+/**
+ * 
+ Componenta zobrazuje detail události
+ */
 
-export function EventDetail({onEventLoad}: Props) {
-
+export function EventDetail({onEventLoad, onEventUrlData}: Props) {
+    //State pro uložení dat o události
     const [event, setEvent] = useState<Event | undefined>();
     const [loading, setLoading] = useState(true);
-
     
-
     useEffect(() => {
 
         try {
@@ -24,11 +29,16 @@ export function EventDetail({onEventLoad}: Props) {
                 setEvent(data);
                 
                 if (data.eventId) {
-                    onEventLoad(data.eventId) // volám setEventId s parametrem eventId vlastnosti na objektu z BE. Zavoláním předám eventId do  Appu.
+                    // volám setEventId s parametrem eventId vlastnosti na objektu z BE. Zavoláním předám eventId do  Appu.
+                    onEventLoad(data.eventId) 
                 }
+                // předám objekt do Appu, jde o setovací fci setEventUrlData()
+                onEventUrlData(data); 
 
             }
             loadEventData();
+
+            
         }
 
         catch (err) {
@@ -39,11 +49,7 @@ export function EventDetail({onEventLoad}: Props) {
             setLoading(false)
         }
 
-
-
     }, []);
-
-
 
 
     return (

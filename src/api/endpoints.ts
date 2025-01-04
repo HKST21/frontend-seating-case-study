@@ -4,14 +4,14 @@ import type {
     OrderReq, OrderRes, User
 } from "./types";
 
-const API_BASE = 'https://nfctron-frontend-seating-case-study-2024.vercel.app';
+const API_BASE = '/api';
 
 export const getEvent = async (): Promise<Event> => {
 
     try {
 
         const response = await fetch(`${API_BASE}/event`, {
-            mode: 'cors',
+            //mode: 'cors',
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -33,11 +33,11 @@ export const getEvent = async (): Promise<Event> => {
 export const getEventTix = async (eventId: string): Promise<Tickets> => {
     try {
         const response = await fetch(`${API_BASE}/event-tickets?eventId=${eventId}`, {
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
+    //mode: 'cors',
+    headers: {
+        'Content-Type': 'application/json'
+    }
+});
 
         if (!response.ok) {
             throw new Error(`HTTP error: ${response.status}`);
@@ -57,8 +57,9 @@ export const testLogin = async (): Promise<TestLoginRes> => {
     try {
         const response = await fetch(`${API_BASE}/login`, {
             method: 'POST',
+            //mode: 'cors',
             headers: {
-                'content-type': 'application/json'
+                'Content-type': 'application/json'
             },
             body: JSON.stringify({
                 email: "frontend@nfctron.com",

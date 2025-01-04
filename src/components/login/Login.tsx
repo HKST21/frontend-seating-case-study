@@ -1,28 +1,39 @@
 import React, { useState } from "react";
 import { testLogin } from "@/api/endpoints";
-import { User, TestLoginRes } from "@/api/types";
+import { User } from "@/api/types";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 type LoginProps = {
+    // clb fce  po přihlášení uživatele
     onLoginSuccess: (user: User) => Promise<void>;
+    // clb fce při objednávce jako host
     onGuestCheckout: (user: User) => Promise<void>;
 }
-
+/**
+Componenta řeší přihlášení jako host nebo login reg useru
+ */
 export function Login({ onLoginSuccess, onGuestCheckout }: LoginProps) {
 
+    // state pro uživatele kvůli vykreslení elementů
     const [userType, setUsertype] = useState<'initial' | 'login' | 'guest'>('initial');
+    // state pro stav objednávky
     const [orderStatus, setOrderStatus] = useState<'succes' | 'failed'>();
+    // state pro popover
     const [isOpen, setIsOpen] = useState(false);
 
-
+    /**
+     * Zpracování přihlášeného uživatele
+     * @param event z inputů
+     */
     const handleOrderLoggedUser = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         try {
             console.log('Calling testLogin');
             const response = await testLogin();
             console.log('testLogin response:', response);
-            onLoginSuccess(response.user); // zavolá se v Cart, řeší co se stane po úspěšném přihlášení
+            // zavolá se v Cart, řeší vytvoření order na základě dat o uživateli
+            onLoginSuccess(response.user); 
             setOrderStatus('succes')
             setIsOpen(false);
         } catch (error) {
@@ -47,7 +58,7 @@ export function Login({ onLoginSuccess, onGuestCheckout }: LoginProps) {
 
             };
             console.log('userData', userData);
-
+            // zavolá se v Cart, řeší vytvoření order na základě dat o uživateli
             onGuestCheckout(userData);
             setIsOpen(false);
             setOrderStatus('succes')

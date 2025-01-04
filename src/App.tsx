@@ -1,4 +1,4 @@
-import { Seat } from '@/components/Seat.tsx';
+
 import { Cart } from './components/cart/Cart';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar.tsx';
 import { Button } from '@/components/ui/button.tsx';
@@ -16,19 +16,53 @@ import './App.css';
 import { useState } from 'react';
 import { SeatingMap } from './components/seating/SeatingMap';
 import { TicketType } from './api/types';
+import { Event } from './api/types';
+
+/* Hlavní komponenta pro rezervační systém vstupenek, spravuje stav přihlášení, sedadel a událostí*/
 
 function App() {
     const isLoggedIn = false;
+	// States pro správu eventů, tix a seats
     const [eventId, setEventId] = useState<string>();
     const [ticketTypes, setTicketTypes] = useState<TicketType[]>([]);
     const [selectedSeats, setSelectedSeats] = useState<{
         ticketTypeId: string,
         seatId: string
     }[]>([]);
+	// State pro data eventu pro Google cal
+	const [eventUrlData, setEventUrlData] = useState<Event | undefined>();
 
+	/**
+	 * funkce pro načtení typů vstupenek
+	 * @param types Pole dostupných typů vstupenek
+	 */
     const handleTicketTypesLoad = (types: TicketType[]) => {
         setTicketTypes(types);
     };
+
+	/**
+	 * Generuje url pro přidání eventu do google cal
+	 * @param event data z EventDetail comp obsahují název, datum, popis, místo konání
+	 * @returns url pro google calendar api
+	 */
+	const generateGoogleCalendarUrl = (event: Event) => {
+		const formatDate = (date: string) => {
+			return date.replace(/[-:]/g, '').replace(' ', 'T') + 'Z';
+		};
+	
+		return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.namePub)}&dates=${formatDate(event.dateFrom)}/${formatDate(event.dateTo)}&details=${encodeURIComponent(event.description)}&location=${encodeURIComponent(event.place)}`;
+	};
+	/**
+	 * handler pro otevření nového okna s daty ze stavu eventUrlData
+	 */
+
+	const handleAddToGoogleCal = () => {
+
+		if (eventUrlData) {
+			window.open(generateGoogleCalendarUrl(eventUrlData), '_blank');
+		}
+		
+	}
 	
 	return (
 		<div className="flex flex-col grow">
@@ -93,8 +127,8 @@ function App() {
                     />
                     
                     <aside className="w-full max-w-sm bg-white rounded-md shadow-sm p-3 flex flex-col gap-2">
-                        <EventDetail onEventLoad={setEventId}/>
-                        <Button variant="secondary" disabled>Add to calendar</Button>
+                        <EventDetail onEventLoad={setEventId} onEventUrlData={setEventUrlData}/>
+                        <Button variant="secondary" onClick={handleAddToGoogleCal}>Add to calendar</Button>
                     </aside>
                 </div>
             </main>
