@@ -103,6 +103,7 @@ function App() {
                 <Cart
                     selectedSeats={selectedSeats}
                     ticketTypes={ticketTypes}
+					eventId={eventId}
                 />
             </nav>
         </div>
