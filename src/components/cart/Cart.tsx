@@ -51,8 +51,8 @@ export function Cart({ selectedSeats, ticketTypes, eventId }: CartProps) {
 
     return (
         <div className="max-w-screen-lg p-6 flex justify-between items-center gap-4 grow flex-wrap">
-            <div className="flex flex-col w-full md:w-auto">
-                <span>Total for {selectedSeats.length} tickets</span>
+            <div className="flex flex-col w-full md:w-auto text-black">
+                <span>Celkem cena za {selectedSeats.length} lístků</span>
                 <span className="text-2xl font-semibold">{totalPrice} CZK</span>
             </div>
             <Login onLoginSuccess={handleLoginSuccess} onGuestCheckout={handleLoginSuccess} />
